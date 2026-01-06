@@ -5,7 +5,7 @@
 module "vpc" {
   source   = "../../modules/vpc"
   vpc_cidr = "10.0.0.0/16"
-  tags     = { Name = "dev-vpc" }
+  tags     = { Name = "${var.environment}-vpc" }
 
   public_subnets = [
     { cidr_block = "10.0.1.0/24", az = "eu-west-1a" },
@@ -24,8 +24,8 @@ module "vpc" {
 module "sg" {
   source  = "../../modules/vpc/sg"
   vpc_id  = module.vpc.vpc_id
-  sg_name = "dev-sg"
-  tags    = { Name = "dev-sg" }
+  sg_name = "${var.sg-name}-sg"
+  tags    = { Name = "${var.sg-name}-sg" }
 }
 
 # ========================

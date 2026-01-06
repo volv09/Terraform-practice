@@ -24,8 +24,8 @@ module "vpc" {
 module "sg" {
   source  = "../../modules/vpc/sg"
   vpc_id  = module.vpc.vpc_id
-  sg_name = "staging-sg"
-  tags    = { Name = "staging-sg" }
+  sg_name = "${var.sg-name}-sg"
+  tags    = { Name = "${var.sg-name}-sg" }
 }
 
 # ========================
