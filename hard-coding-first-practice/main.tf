@@ -12,7 +12,7 @@ terraform {
 resource "aws_vpc" "test" {
   cidr_block = "10.0.0.0/16" # Specify size of the VPC network
 
-tags = {
+  tags = {
     Name = "my-vpc" # Specify name of the VPC
   }
 }
@@ -38,7 +38,7 @@ resource "aws_route_table" "public" {
   tags = {
     Name = "public-route-table"
   }
-} 
+}
 
 # Create public subnet in AZ eu-west-1a
 resource "aws_subnet" "public1" {
@@ -60,7 +60,7 @@ resource "aws_route_table_association" "public1" {
 
 # Create security group that allows all inbound oublic traffic
 resource "aws_security_group" "allow_all_inbound_http_traffic" {
-  vpc_id      = aws_vpc.test.id
+  vpc_id = aws_vpc.test.id
 
   tags = {
     Name = "allow_all_inbound_http_traffic"
@@ -85,18 +85,18 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_outbound_traffic" {
 
 # Create EC2 instance within the public subnet in AZ eu-west-1a
 resource "aws_instance" "public" {
-  ami             = "ami-06297e16b71156b52"
-  instance_type   = "t3.micro"
-  subnet_id       = aws_subnet.public1.id
+  ami                    = "ami-06297e16b71156b52"
+  instance_type          = "t3.micro"
+  subnet_id              = aws_subnet.public1.id
   vpc_security_group_ids = [aws_security_group.allow_all_inbound_http_traffic.id]
 
-# Volume configuration
+  # Volume configuration
   root_block_device {
     volume_size = 8
     volume_type = "gp3"
   }
 
-user_data = <<-EOF
+  user_data = <<-EOF
     #!/bin/bash
     yum update -y
     yum install -y python3

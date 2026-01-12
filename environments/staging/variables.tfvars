@@ -1,2 +1,2 @@
 environment = "staging"
-sg-name = "staging"
+sg-name     = "staging"

@@ -1,2 +1,2 @@
 environment = "dev"
-sg-name = "dev"
+sg-name     = "dev"
