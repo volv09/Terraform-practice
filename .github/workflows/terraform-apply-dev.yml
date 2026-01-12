@@ -45,7 +45,7 @@ jobs:
         run: echo "Dev applied successfully" > .last_apply
 
       - name: Upload Dev Apply Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dev-apply-success
           path: .last_apply
