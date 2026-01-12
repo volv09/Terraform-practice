@@ -23,6 +23,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Download Dev Apply Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dev-apply-success
+          path: ./artifacts
+
+      - name: Fail if Dev Not Applied
+        run: |
+          if [ ! -f ./artifacts/.last_apply ]; then
+            echo "Dev must be applied first!"
+            exit 1
+          fi
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
