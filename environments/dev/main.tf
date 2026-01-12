@@ -60,7 +60,7 @@ module "ec2_public" {
 module "ec2_private" {
   source        = "../../modules/ec2"
   instance_name = "ec2-private-1"
-  ami_id           = ""
+  ami_id        = ""
   instance_type = "t3.micro"
   subnet_id     = module.vpc.private_subnet_ids[0]
   sg_ids        = [module.sg.sg_id]

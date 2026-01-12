@@ -1,2 +1,2 @@
 environment = "prod"
-sg-name = "prod"
+sg-name     = "prod"
