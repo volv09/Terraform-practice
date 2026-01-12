@@ -1,0 +1,43 @@
+name: Terraform CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform-dev:
+    name: Terraform CI (dev)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.5      
+      
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Terraform init (dev)
+        working-directory: environments/dev
+        run: terraform init -input=false
+
+      - name: Terraform validate (dev)
+        working-directory: environments/dev
+        run: terraform validate
+
+      - name: Terraform plan (dev)
+        working-directory: environments/dev
+        run: terraform plan -input=false
+
