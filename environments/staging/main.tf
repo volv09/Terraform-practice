@@ -5,7 +5,7 @@
 module "vpc" {
   source   = "../../modules/vpc"
   vpc_cidr = "10.0.0.0/16"
-  tags     = { Name = "staging-vpc" }
+  tags     = { Name = "${var.environment}-vpc" }
 
   public_subnets = [
     { cidr_block = "10.0.1.0/24", az = "eu-west-1a" },
