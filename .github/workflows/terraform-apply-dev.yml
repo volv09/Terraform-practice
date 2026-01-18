@@ -67,14 +67,15 @@ jobs:
           terraform plan ${{ env.TF_INPUT }} -var-file=variables.tfvars -out=tfplan -no-color
           terraform show -no-color tfplan > plan.txt
 
-      - name: Upload Terraform plan artifact (dev)
-      - uses: actions/upload-artifact@v4
+      - name: Upload Terraform plan artifact for summary (dev)
+        uses: actions/upload-artifact@v4
         with:
           name: terraform-plan-dev-summary
           path: environments/dev/plan.txt
           retention-days: 7
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Terraform plan artifact for terraform apply (dev)
+        uses: actions/upload-artifact@v4
         with:
           name: terraform-plan-dev-binary
           path: environments/dev/tfplan
