@@ -20,20 +20,28 @@ jobs:
     name: Terraform Plan (dev)
     runs-on: ubuntu-latest
 
-    if: >
-      github.ref == 'refs/heads/main' &&
-      github.event.issue.pull_request != null &&
-      github.event.comment.body == '#apply-dev' &&
-      github.event.pull_request.merged == true
-
     defaults:
       run:
         shell: bash
         working-directory: environments/dev
 
+    if: >
+      github.ref == 'refs/heads/main' &&
+      github.event.comment.body == '#apply-dev'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Check if PR is merged
+        run: |
+          PR_NUMBER=${{ github.event.issue.number }}
+          MERGED=$(gh pr view $PR_NUMBER --json merged -q .merged)
+          echo "PR_MERGED=$MERGED" >> $GITHUB_ENV
+          if [ "$MERGED" != "true" ]; then
+            echo "PR is not merged. Exiting."
+            exit 0
+          fi
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -107,7 +115,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terraform-plan-dev
-          path: environments/dev/plan.txt
+          path: environments/dev/
 
       - name: Terraform apply
         run: terraform apply tfplan
