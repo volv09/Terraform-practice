@@ -70,13 +70,13 @@ jobs:
       - name: Upload Terraform plan artifact (dev)
       - uses: actions/upload-artifact@v4
         with:
-          name: terraform-plan-summary
+          name: terraform-plan-dev-summary
           path: environments/dev/plan.txt
           retention-days: 7
 
       - uses: actions/upload-artifact@v4
         with:
-          name: terraform-plan-binary
+          name: terraform-plan-dev-binary
           path: environments/dev/tfplan
           retention-days: 7
 
