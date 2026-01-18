@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     if: >
-      github.ref == 'refs/heads/main'
+      github.ref == 'refs/heads/main' &&
       github.event.issue.pull_request != null &&
       github.event.comment.body == '#apply-dev' &&
       github.event.pull_request.merged == true
