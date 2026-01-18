@@ -27,7 +27,22 @@ jobs:
       - name: Warn about formatting
         if: steps.fmt.outcome == 'failure'
         run: |
-          echo "::warning::Terraform files are not properly formatted. Recommendation: Run 'terraform fmt -recursive'."
+          echo "::warning::Terraform formatting issues detected. Recommendation: Run 'terraform fmt -recursive'."
+
+      - name: Comment on PR if Terraform fmt failed
+        if: steps.fmt.outcome == 'failure'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            ⚠️ **Terraform formatting issues detected**
+
+            One or more Terraform files are not properly formatted.
+
+            It is recommended to run the following command locally and push the result:
+
+            ```bash
+            terraform fmt -recursive
+            ```
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
