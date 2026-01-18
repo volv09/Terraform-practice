@@ -64,6 +64,40 @@ jobs:
         run: terraform validate
 
       - name: Terraform plan (dev)
+        id: plan
         working-directory: environments/dev
-        run: terraform plan -input=false -var-file=variables.tfvars
+        run: |
+          terraform plan -input=false -var-file=variables.tfvars -no-color > plan.txt
 
+      - name: Upload Terraform plan artifact (dev)
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-dev
+          path: environments/dev/plan.txt
+          retention-days: 7
+
+      - name: Publish Terraform Plan Summary
+        if: always()
+        working-directory: environments/dev
+        run: |
+          echo "## Terraform Plan (dev)" >> $GITHUB_STEP_SUMMARY
+          echo '```terraform' >> $GITHUB_STEP_SUMMARY
+          head -n 300 plan.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment Terraform Plan on PR
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: terraform-plan-dev
+          message: |
+            🧪 **Terraform Plan (dev)**
+
+            <details>
+            <summary>Click to expand</summary>
+
+            ```terraform
+            $(sed -n '1,300p' environments/dev/plan.txt)
+            ```
+
+            </details>
