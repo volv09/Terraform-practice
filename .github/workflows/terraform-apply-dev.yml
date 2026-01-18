@@ -124,7 +124,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terraform-plan-dev-binary
-          path: environments/dev/
+          path: .
 
       - name: Terraform apply
-        run: terraform apply environments/dev/tfplan
+        run: terraform apply tfplan
