@@ -120,4 +120,4 @@ jobs:
           path: environments/dev/
 
       - name: Terraform apply
-        run: terraform apply tfplan
+        run: terraform apply environments/dev/tfplan
