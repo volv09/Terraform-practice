@@ -38,9 +38,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_NUMBER=${{ github.event.issue.number }}
-          MERGED=$(gh pr view $PR_NUMBER --json merged -q .merged)
+          MERGED=$(gh pr view $PR_NUMBER --json mergedAt -q '.mergedAt')
           echo "PR_MERGED=$MERGED" >> $GITHUB_ENV
-          if [ "$MERGED" != "true" ]; then
+          if [ -z "$MERGED" ] || [ "$MERGED" = "null" ]; then
             echo "PR is not merged. Exiting."
             exit 0
           fi
