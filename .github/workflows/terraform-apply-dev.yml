@@ -68,10 +68,16 @@ jobs:
           terraform show -no-color tfplan > plan.txt
 
       - name: Upload Terraform plan artifact (dev)
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: terraform-plan-dev
+          name: terraform-plan-summary
           path: environments/dev/plan.txt
+          retention-days: 7
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-binary
+          path: environments/dev/tfplan
           retention-days: 7
 
       - name: Publish Terraform Plan Summary
