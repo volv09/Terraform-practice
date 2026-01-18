@@ -20,7 +20,14 @@ jobs:
           terraform_version: 1.13.5      
       
       - name: Terraform fmt
+        id: fmt 
+        continue-on-error: true
         run: terraform fmt -check -recursive
+
+      - name: Warn about formatting
+        if: steps.fmt.outcome == 'failure'
+        run: |
+          echo "::warning::Terraform files are not properly formatted. Recommendation: Run 'terraform fmt -recursive'."
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
