@@ -82,8 +82,15 @@ jobs:
         run: |
           echo "## Terraform Plan (dev)" >> $GITHUB_STEP_SUMMARY
           echo '```terraform' >> $GITHUB_STEP_SUMMARY
-          head -n 300 plan.txt >> $GITHUB_STEP_SUMMARY
+          head -n 500 plan.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Read Terraform plan into env var
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "TF_PLAN<<EOF" >> $GITHUB_ENV
+          sed -n '1,500p' environments/dev/plan.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Comment Terraform Plan on PR
         if: github.event_name == 'pull_request'
@@ -97,7 +104,8 @@ jobs:
             <summary>Click to expand</summary>
 
             ```terraform
-            $(sed -n '1,300p' environments/dev/plan.txt)
+            ${{ env.TF_PLAN }}
             ```
 
             </details>
+
